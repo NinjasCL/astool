@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta author="ninjas.cl">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>Avatar Spirits Tool</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+
+    <style>
+        html, body {
+            background-color: #33333c;
+        }
+
+        body {
+            background: linear-gradient(
+            rgba(0, 0, 0, 0.7), 
+            rgba(0, 0, 0, 0.7)
+            ), url(assets/images/avatars.webp) repeat;
+        }
+
+        html, body, p, select, option, strong, a, h1, h2, h3, h4, h5, h6, title, button {
+            color:#ffffff;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        button.purple {
+            background-color: mediumslateblue;
+            padding: 10px;
+            border-color: mediumpurple;
+        }
+
+        header {
+            padding-top: 2vh;
+            padding-left: 2vh;
+            padding-bottom: 2vh;
+        }
+
+        main {
+            padding-left: 2vh;
+            padding-bottom: 10vh;
+        }
+
+        footer {
+            text-align: center;
+            padding-bottom: 5vh;
+        }
+
+        .transparent-button {
+            background-color: transparent;
+            border-color: transparent;
+            cursor: pointer;
+        }
+
+        select.select {
+            color: #33333c;
+            font-size: 1.2em;
+            padding: 0.4em;
+        }
+
+        .avatar-image {
+            width:auto;
+            height: 100px;
+        }
+
+        .audio-eq-image {
+            width:auto;
+            height: 100px;
+        }
+
+        .logo {
+            width: auto;
+            height: 100px;
+        }
+
+        .h2 {
+            font-size: 1.2em;
+        }
+
+        h2.section {
+            background-color: azure;
+            color: #33333c;
+            max-width: 50vh;
+            padding: 1vh;
+        }
+
+        table.with-td-padding td {
+            padding-top:20px;
+            padding-bottom:30px;
+            padding-right:20px;
+            padding-left:20px;
+        }
+
+        table.with-td-padding td:first-child {
+            padding-right:0;
+        }
+
+        td.right {
+            color: yellowgreen;
+            font-size: large;
+            padding-left: 10vh;
+            padding-bottom: 2vh;
+        }
+
+        img.small {
+            width:auto;
+            height:50px;
+        }
+
+        img.big {
+            width:auto;
+            height:100px;
+        }
+    </style>
+    <script>
+        const data = {};
+
+        // TODO: Soportar canciones al azar?
+        // https://archive.org/details/streetfighterzero3soundtrackflac/
+        // https://archive.org/details/ultra-street-fighter-iv-complete-soundtrack
+        data.avatars = {
+            alicia: {
+                id: "alicia",
+                name: "Alicia",
+                image: "assets/images/ca-alicia.webp",
+                song: "https://ia600107.us.archive.org/24/items/streetfighterzero3soundtrackflac/18.%20Doll%20Eyes%20%28Cammy%27s%20Theme%29.mp3",
+            },
+            maximillian: {
+                id: "maximillian",
+                name: "Maximillian",
+                image: "assets/images/ca-maximillian.webp",
+                song: "https://ia600107.us.archive.org/24/items/streetfighterzero3soundtrackflac/13.%20Fatal%20Depth%20%28Vega%27s%20Theme%29.mp3"
+            },
+            nila: {
+                id: "nila",
+                name: "Nila",
+                image: "assets/images/ca-nila.webp",
+                song: "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/31.%20Untamable%20Fists%20%28M.Bison%27s%20Theme%29.mp3"
+            },
+            levana: {
+                id: "levana",
+                name: "Levana",
+                image: "assets/images/ca-levana.webp",
+                song: "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/20.%20Praying%20%28Dhalsim%27s%20Theme%29.mp3"
+            }
+            /* // TODO: Añadir cuando estén las imagenes 
+            , janette: {
+                    id: "janette",
+                    name: "Janette",
+                    image: "assets/images/ca-janette.webp",
+                    song: "https://archive.org/download/streetfighterzero3soundtrackflac/29.%20Scala%20%28Rose%27s%20Theme%29.mp3"
+            },
+            anna: {
+                    id: "anna",
+                    name: "Anna",
+                    image: "assets/images/ca-anna.webp",
+                    song: "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/19.%20Heavy%20Swell%20%28Zangief%27s%20Theme%29.mp3"
+            }
+            //*/
+        }
+
+        const state = {
+            initiative: false
+        };
+
+        const music = {
+            playing: false,
+            audio: null
+        };
+
+        music.stop = () => {
+            if (!music.playing) {
+                return null;
+            }
+
+            music.audio.pause();
+            music.playing = false;
+            music.audio = null;
+        }
+
+        music.play = (song) => {
+            music.stop();
+            music.playing = true;
+
+            music.audio = new Audio(song)
+            music.audio.loop = true;
+            music.audio.play();
+        }
+
+        const choose = (avatar_id) => {
+            const avatar = data.avatars[avatar_id];
+
+            document.getElementById("music-title").innerText = "🔊 " + avatar.name;
+
+            const cassette = document.getElementById("cassette");
+            cassette.innerHTML = `
+                <img class="audio-eq-image transparent-button" src="assets/images/cassette.webp" onclick="stop()">
+            `;
+            music.play(avatar.song);
+        }
+
+        const stop = () => {
+            
+            document.getElementById("music-title").innerText = "🔇 🙉";
+
+            const cassette = document.getElementById("cassette");
+            cassette.innerHTML = `
+                <img class="audio-eq-image" src="assets/images/cassette.png">
+            `;
+
+            music.stop();
+        }
+
+        const random = (min = 1, max = 1000) => {
+           return Number(Math.floor(Math.random() * (max - min + 1) + min)).toString();
+        }
+
+        const set_random = () => {
+            document.getElementById("random").innerText = random();
+        }
+
+        const set_coin = () => {
+            const face = Math.floor(Math.random() * 2) == 0;
+            document.getElementById("coin").innerText = face ? "⭕" : "❌";
+        }
+
+        const set_initiative = () => {
+            state.initiative = !state.initiative;
+            let element = state.initiative ? `<img class="big" src="assets/images/red.png">` : `<img class="big" src="assets/images/blue.png">`;
+            document.getElementById("initiative").innerHTML = `
+                ${element}
+            `;
+        }
+
+    </script>
+</head>
+<body>
+    <header>
+        <a href="https://aiogames.cl" target="_blank">
+            <img src="assets/images/logo.webp" class="logo">
+        </a>
+    </header>
+    <main id="content">
+            <section id="game-session">
+                <h2 class="section">🎲 PARTIDA</h2>
+                <table class="with-td-padding">
+                    <tbody>
+                    <tr>
+                        <td>RONDA (ROUND)</td>
+                        <td></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ASALTO (BOUT)</td>
+                        <td></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>INICIATIVA</td>
+                        <td></td>
+                        <td id="initiative" class="transparent-button" onClick="set_initiative()">
+                            <img class="big" src="assets/images/red.png">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="player1">
+                <h2 class="section">1️ PLAYER 1</h2>
+                <table class="with-td-padding">
+                    <tbody>
+                        <tr>
+                            <td>PUNTOS VOLUNTAD</td>
+                            <td><img class="small" src="assets/images/pv.png"></td>
+                            <td>
+                                <select class="select">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+
+                                <select class="select">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td>DESGASTE</td>
+                        <td><img class="small" src="assets/images/desgaste-blue.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                                <option>21</option>
+                                <option>X</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>IMPULSO</td>
+                        <td><img class="small" src="assets/images/impulso.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FATIGA</td>
+                        <td><img class="small" src="assets/images/fatiga.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>KI</td>
+                        <td><img class="small" src="assets/images/ki.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>DEFENSA</td>
+                        <td><img class="small" src="assets/images/def.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    </tbody>
+                </table>
+            </section>
+            <section id="player2">
+                <h2 class="section">2️ PLAYER 2</h2>
+                <table class="with-td-padding">
+                    <tbody>
+                        <tr>
+                            <td>PUNTOS VOLUNTAD</td>
+                            <td><img class="small" src="assets/images/pv.png"></td>
+                            <td>
+                                <select class="select">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+
+                                <select class="select">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td>DESGASTE</td>
+                        <td><img class="small" src="assets/images/desgaste-red.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                                <option>21</option>
+                                <option>X</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>IMPULSO</td>
+                        <td><img class="small" src="assets/images/impulso.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FATIGA</td>
+                        <td><img class="small" src="assets/images/fatiga.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>KI</td>
+                        <td><img class="small" src="assets/images/ki.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>DEFENSA</td>
+                        <td><img class="small" src="assets/images/def.png"></td>
+                        <td>
+                            <select class="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                            </select>
+                        </td>
+                    </tr>
+                    
+                    </tbody>
+                </table>
+            </section>
+            <section id="music">
+                <h2 class="section">🎶 Música</h2>
+                <table class="with-td-padding">
+                    <tbody>
+                        <tr id="music-avatars">
+                        </tr>
+                        <tr>
+                            <td id="music-title" class="h2">🔇 🙉</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="cassette">
+                                <img class="audio-eq-image" src="assets/images/cassette.png">
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="tools">
+                <h2 class="section">⚒️ Herramientas</h2>
+                <table class="with-td-padding">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <button class="purple" onclick="set_random()">Número Aleatorio</button>
+                        </td>
+                        <td id="random" class="right">-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="purple" onclick="set_coin()">Lanzar una moneda</button>
+                        </td>
+                        <td id="coin" class="right">-</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <a href="https://github.com/ninjascl/astool">Avatar Spirits Tool</a>. Hecho con ❤️ por <a href="https://ninjas.cl">Ninjas.cl</a>.
+
+    </footer>
+    <script type="text/javascript">
+        const music_avatars = document.getElementById("music-avatars");
+
+        Object.values(data.avatars).forEach(avatar => {
+            music_avatars.innerHTML += `
+            <button class="transparent-button" id="${avatar.name}-button" onclick="choose('${avatar.id}')">
+                <img class="avatar-image" src="${avatar.image}">
+            </button>
+            `
+        })
+
+        
+    </script>
+</body>
+</html>

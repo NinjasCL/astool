@@ -1,0 +1,18 @@
+# https://ninjascl.github.io/astool/[Avatar Spirits Tool]
+
+Una herramienta de apoyo para jugar https://aiogames.cl[Avatar Spirits].
+
+- Usar: https://ninjascl.github.io/astool/
+
+## LICENCIA
+
+BSD 2-Clause License
+
+## Créditos
+
+- https://aiogames.cl
+
+++++
+Herramienta hecha con <i class="fa fa-heart">&#9829;</i> por <a href="https://ninjas.cl" target="_blank">Ninjas.cl</a>.
+++++
+
