@@ -123,38 +123,63 @@
                 id: "alicia",
                 name: "Alicia",
                 image: "assets/images/ca-alicia.webp",
-                song: "https://ia600107.us.archive.org/24/items/streetfighterzero3soundtrackflac/18.%20Doll%20Eyes%20%28Cammy%27s%20Theme%29.mp3",
+                songs: [
+                    "https://ninjascl.github.io/astool/assets/music/alicia/01.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/alicia/02.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/alicia/03.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/alicia/04.mp3",
+                ]
             },
             maximillian: {
                 id: "maximillian",
                 name: "Maximillian",
                 image: "assets/images/ca-maximillian.webp",
-                song: "https://ia600107.us.archive.org/24/items/streetfighterzero3soundtrackflac/13.%20Fatal%20Depth%20%28Vega%27s%20Theme%29.mp3"
+                songs: [
+                    "https://ninjascl.github.io/astool/assets/music/maximillian/01.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/maximillian/02.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/maximillian/03.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/maximillian/04.mp3",
+                ]
             },
             nila: {
                 id: "nila",
                 name: "Nila",
                 image: "assets/images/ca-nila.webp",
-                song: "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/31.%20Untamable%20Fists%20%28M.Bison%27s%20Theme%29.mp3"
+                songs: [
+                    "https://ninjascl.github.io/astool/assets/music/nila/01.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/nila/02.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/nila/03.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/nila/04.mp3",
+                ]
             },
             levana: {
                 id: "levana",
                 name: "Levana",
                 image: "assets/images/ca-levana.webp",
-                song: "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/20.%20Praying%20%28Dhalsim%27s%20Theme%29.mp3"
+                songs: [
+                    "https://ninjascl.github.io/astool/assets/music/levana/01.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/levana/02.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/levana/03.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/levana/04.mp3",
+                    "https://ninjascl.github.io/astool/assets/music/levana/05.mp3",
+                ]
             }
             /* // TODO: Añadir cuando estén las imagenes 
             , janette: {
                     id: "janette",
                     name: "Janette",
                     image: "assets/images/ca-janette.webp",
-                    song: "https://archive.org/download/streetfighterzero3soundtrackflac/29.%20Scala%20%28Rose%27s%20Theme%29.mp3"
+                    songs: [
+                        "https://archive.org/download/streetfighterzero3soundtrackflac/29.%20Scala%20%28Rose%27s%20Theme%29.mp3",
+                    ]
             },
             anna: {
                     id: "anna",
                     name: "Anna",
                     image: "assets/images/ca-anna.webp",
-                    song: "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/19.%20Heavy%20Swell%20%28Zangief%27s%20Theme%29.mp3"
+                    songs: [
+                        "https://ia800107.us.archive.org/24/items/streetfighterzero3soundtrackflac/19.%20Heavy%20Swell%20%28Zangief%27s%20Theme%29.mp3",
+                    ]
             }
             //*/
         }
@@ -196,7 +221,9 @@
             cassette.innerHTML = `
                 <img class="audio-eq-image transparent-button" src="assets/images/cassette.webp" onclick="stop()">
             `;
-            music.play(avatar.song);
+
+            const song = avatar.songs[Math.floor(Math.random() * avatar.songs.length)];
+            music.play(song);
         }
 
         const stop = () => {
