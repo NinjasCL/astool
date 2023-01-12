@@ -188,6 +188,33 @@
             }
         }
 
+        data.sfx = [
+            {
+                name: "Death 1",
+                file: "assets/sfx/12.wav"
+            },
+            {
+                name: "Death 2",
+                file: "assets/sfx/13.wav"
+            },
+            {
+                name: "Ready 1",
+                file: "assets/sfx/1.wav"
+            },
+            {
+                name: "Ready 2",
+                file: "assets/sfx/6.wav"
+            },
+            {
+                name: "KO 1",
+                file: "assets/sfx/4.wav"
+            },
+            {
+                name: "KO 2",
+                file: "assets/sfx/8.wav"
+            }
+        ]
+
         const state = {
             initiative: false
         };
@@ -196,6 +223,15 @@
             playing: false,
             audio: null
         };
+
+        const sfx = {
+            audio: null
+        }
+
+        sfx.play = (sound) => {
+            sfx.audio = new Audio(sound);
+            sfx.audio.play();
+        }
 
         music.stop = () => {
             if (!music.playing) {
@@ -658,7 +694,9 @@
                 <h2 class="section">🎶 Música</h2>
                 <table class="with-td-padding">
                     <tbody>
-                        <tr id="music-avatars">
+                        <tr>
+                            <td id="music-avatars">
+                            </td>
                         </tr>
                         <tr>
                             <td id="music-title" class="h2">🔇 🙉</td>
@@ -671,6 +709,15 @@
                             </td>
                             <td></td>
                             <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section id="sfx">
+                <h2 class="section">🔔 SFX</h2>
+                <table class="with-td-padding">
+                    <tbody>
+                        <tr id="sound-effects">
                         </tr>
                     </tbody>
                 </table>
@@ -713,6 +760,15 @@
             </button>
             `
         })
+
+        const sound_effects = document.getElementById("sound-effects");
+        data.sfx.forEach(sound => {
+            sound_effects.innerHTML += `
+                <button class="transparent-button purple" onclick="sfx.play('${sound.file}')">
+                    ${sound.name}
+                </button>
+            `
+        });
 
         
     </script>
